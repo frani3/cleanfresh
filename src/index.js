@@ -1,0 +1,24 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { PublicClientApplication, EventType } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
+import { msalConfig } from './authConfig';
+
+const msalInstance = new PublicClientApplication(msalConfig);
+
+msalInstance.initialize().then(() => {
+  // Manejar el redirect callback
+  msalInstance.handleRedirectPromise().then((response) => {
+    if (response) {
+      msalInstance.setActiveAccount(response.account);
+    }
+  });
+
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <MsalProvider instance={msalInstance}>
+      <App />
+    </MsalProvider>
+  );
+});

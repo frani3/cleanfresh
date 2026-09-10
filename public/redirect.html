@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirigiendo...</title>
+  </head>
+  <body>
+    <script>
+      // Dejar que MSAL procese el callback antes de redirigir
+      if (window.location.hash || window.location.search) {
+        // MSAL necesita procesar esto, no redirigir aún
+        window.opener = window.opener || window;
+      } else {
+        window.location.href = '/';
+      }
+    </script>
+  </body>
+</html>
