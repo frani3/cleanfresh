@@ -1,8 +1,19 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import App from "./App";
+import { msalConfig } from "./authConfig";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("muestra la pantalla de inicio de sesión cuando no hay sesión activa", async () => {
+  const msalInstance = new PublicClientApplication(msalConfig);
+  await msalInstance.initialize();
+
+  render(
+    <MsalProvider instance={msalInstance}>
+      <App />
+    </MsalProvider>
+  );
+
+  const loginButton = await screen.findByText(/iniciar sesión con microsoft/i);
+  expect(loginButton).toBeInTheDocument();
 });
